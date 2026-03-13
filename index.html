@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verlust-Kalkulator – mehrdirektbuchungen.de</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600&family=Inter:wght@400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --hell:#FFFFFF;
+  --primary:#F4BD7F;
+  --secondary:#6DA9E4;
+  --dark:#0F172A;
+  --red:#E74C3C;
+  --muted:#64748B;
+}
+body{font-family:'Inter',sans-serif;font-weight:400;background:#f1f5f9;color:var(--dark);min-height:100vh}
+
+/* HEADER */
+header{background:var(--dark);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem}
+.logo-mark{font-family:'Outfit',sans-serif;font-weight:600;font-size:1.5rem;color:var(--primary);border:2px solid var(--primary);border-radius:.5rem;padding:.15rem .5rem;line-height:1}
+.header-text h1{font-family:'Outfit',sans-serif;font-weight:600;font-size:1.25rem;color:var(--hell)}
+.header-text p{font-size:.8rem;color:var(--muted);margin-top:.15rem}
+
+/* MAIN */
+main{max-width:960px;margin:2rem auto;padding:0 1rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:599px){main{grid-template-columns:1fr}}
+
+/* SECTIONS */
+.card{background:var(--hell);border-radius:.75rem;padding:1.5rem;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.section-title{font-family:'Outfit',sans-serif;font-weight:600;font-size:.95rem;color:var(--dark);margin-bottom:1rem;text-transform:uppercase;letter-spacing:.03em}
+
+/* FORM */
+.field{margin-bottom:1rem}
+.field label{display:block;font-family:'Outfit',sans-serif;font-weight:600;font-size:.8rem;color:var(--muted);margin-bottom:.3rem}
+.field input{width:100%;padding:.55rem .75rem;border:1px solid #cbd5e1;border-radius:.5rem;font-family:'Inter',sans-serif;font-size:.95rem;color:var(--dark);outline:none;transition:border-color .15s}
+.field input:focus{border-color:var(--secondary)}
+
+/* RESULT SIDE */
+.badge{display:inline-block;background:var(--secondary);color:var(--hell);font-family:'Outfit',sans-serif;font-weight:600;font-size:.85rem;padding:.35rem .9rem;border-radius:2rem;margin-bottom:1.25rem}
+
+.pain-row{background:rgba(231,76,60,.08);border-radius:.5rem;padding:.65rem .9rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.pain-row .label{font-size:.85rem;color:var(--dark)}
+.pain-row .value{font-family:'Outfit',sans-serif;font-weight:600;font-size:.95rem;color:var(--red)}
+
+.total-box{background:var(--dark);border-radius:.75rem;padding:1.25rem;margin-top:1rem;text-align:center}
+.total-box .total-label{font-family:'Outfit',sans-serif;font-weight:600;font-size:.8rem;color:var(--primary);letter-spacing:.05em}
+.total-box .total-value{font-family:'Outfit',sans-serif;font-weight:600;font-size:1.75rem;color:var(--hell);margin-top:.25rem}
+
+.invest-pill{background:rgba(244,189,127,.12);border:1px solid rgba(244,189,127,.35);border-radius:2rem;padding:.5rem 1rem;text-align:center;font-size:.85rem;color:var(--dark);margin-top:.75rem;display:none}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">MD</div>
+  <div class="header-text">
+    <h1>Verlust-Kalkulator</h1>
+    <p>mehrdirektbuchungen.de – Setting Call Tool</p>
+  </div>
+</header>
+
+<main>
+  <!-- INPUTS -->
+  <div class="inputs-col">
+    <div class="card" style="margin-bottom:1.5rem">
+      <div class="section-title">Hotel-Daten</div>
+      <div class="field">
+        <label>Zimmer gesamt</label>
+        <input type="number" id="zimmer" placeholder="60">
+      </div>
+      <div class="field">
+        <label>ADR – Ø Zimmerpreis / Nacht €</label>
+        <input type="number" id="adr" placeholder="95">
+      </div>
+      <div class="field">
+        <label>Auslastung Nebensaison %</label>
+        <input type="number" id="auslastung" placeholder="42">
+      </div>
+      <div class="field">
+        <label>Nebensaison-Dauer in Monaten</label>
+        <input type="number" id="monate" placeholder="4">
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">OTA &amp; Fixkosten</div>
+      <div class="field">
+        <label>OTA-Anteil %</label>
+        <input type="number" id="otaAnteil" placeholder="55">
+      </div>
+      <div class="field">
+        <label>OTA-Provision %</label>
+        <input type="number" id="otaProvision" value="17">
+      </div>
+      <div class="field">
+        <label>Fixkosten leer € / Zimmer / Tag</label>
+        <input type="number" id="fixkosten" value="40">
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-col">
+    <div class="card">
+      <div class="section-title">Ergebnis</div>
+      <div class="badge" id="badgeLeere">— leere Zimmer / Nacht</div>
+      <div class="pain-row">
+        <span class="label">Entgangener Umsatz / Jahr</span>
+        <span class="value" id="valA">—</span>
+      </div>
+      <div class="pain-row">
+        <span class="label">Fixkosten Leerstand / Jahr</span>
+        <span class="value" id="valB">—</span>
+      </div>
+      <div class="pain-row">
+        <span class="label">OTA-Provisionen / Jahr</span>
+        <span class="value" id="valC">—</span>
+      </div>
+      <div class="total-box">
+        <div class="total-label">GESAMTVERLUST / JAHR</div>
+        <div class="total-value" id="valTotal">—</div>
+      </div>
+      <div class="invest-pill" id="investPill"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  const ids = ['zimmer','adr','auslastung','monate','otaAnteil','otaProvision','fixkosten'];
+  const els = {};
+  ids.forEach(id => { els[id] = document.getElementById(id); });
+
+  const $badgeLeere = document.getElementById('badgeLeere');
+  const $valA = document.getElementById('valA');
+  const $valB = document.getElementById('valB');
+  const $valC = document.getElementById('valC');
+  const $valTotal = document.getElementById('valTotal');
+  const $investPill = document.getElementById('investPill');
+
+  function fmt(n){
+    return Math.round(n).toLocaleString('de-DE') + ' €';
+  }
+
+  function calc(){
+    const zimmer = parseFloat(els.zimmer.value);
+    const adr = parseFloat(els.adr.value);
+    const auslastung = parseFloat(els.auslastung.value);
+    const monate = parseFloat(els.monate.value);
+    const otaAnteil = parseFloat(els.otaAnteil.value);
+    const otaProvision = parseFloat(els.otaProvision.value);
+    const fixkosten = parseFloat(els.fixkosten.value);
+
+    const valid = [zimmer,adr,auslastung,monate,otaAnteil,otaProvision,fixkosten].every(v => isFinite(v) && !isNaN(v));
+
+    if(!valid){
+      $badgeLeere.textContent = '— leere Zimmer / Nacht';
+      $valA.textContent = '—';
+      $valB.textContent = '—';
+      $valC.textContent = '—';
+      $valTotal.textContent = '—';
+      $investPill.style.display = 'none';
+      return;
+    }
+
+    const leere = Math.round(zimmer * (1 - auslastung / 100));
+
+    const a = leere * adr * 30 * monate;
+    const b = leere * fixkosten * 30 * monate;
+    const c = (zimmer * auslastung / 100) * adr * 365 * (otaAnteil / 100) * (otaProvision / 100);
+    const gesamt = a + b + c;
+
+    $badgeLeere.textContent = leere + ' leere Zimmer / Nacht';
+    $valA.textContent = fmt(a);
+    $valB.textContent = fmt(b);
+    $valC.textContent = fmt(c);
+    $valTotal.textContent = fmt(gesamt);
+
+    if(gesamt > 0){
+      const pct = (9750 / gesamt * 100).toFixed(1).replace('.',',');
+      $investPill.textContent = '9.750 € = nur ' + pct + ' % des Jahresverlusts';
+      $investPill.style.display = 'block';
+    } else {
+      $investPill.style.display = 'none';
+    }
+  }
+
+  ids.forEach(id => { els[id].addEventListener('input', calc); });
+  calc();
+})();
+</script>
+</body>
+</html>
