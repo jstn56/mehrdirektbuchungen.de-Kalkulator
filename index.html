@@ -36,7 +36,7 @@ main{max-width:960px;margin:2rem auto;padding:0 1rem;display:grid;grid-template-
 /* FORM */
 .field{margin-bottom:1rem}
 .field label{display:block;font-family:'Outfit',sans-serif;font-weight:600;font-size:.8rem;color:var(--muted);margin-bottom:.3rem}
-.field input{width:100%;padding:.55rem .75rem;border:1px solid #cbd5e1;border-radius:.5rem;font-family:'Inter',sans-serif;font-size:.95rem;color:var(--dark);outline:none;transition:border-color .15s}
+.field input{width:100%;padding:.7rem .75rem;border:1px solid #cbd5e1;border-radius:.5rem;font-family:'Inter',sans-serif;font-size:1rem;color:var(--dark);outline:none;transition:border-color .15s;min-height:44px;-webkit-appearance:none;appearance:none}
 .field input:focus{border-color:var(--secondary)}
 
 /* RESULT SIDE */
@@ -70,34 +70,34 @@ main{max-width:960px;margin:2rem auto;padding:0 1rem;display:grid;grid-template-
       <div class="section-title">Hotel-Daten</div>
       <div class="field">
         <label>Zimmer gesamt</label>
-        <input type="number" id="zimmer" placeholder="60">
+        <input type="number" inputmode="decimal" id="zimmer" placeholder="60">
       </div>
       <div class="field">
         <label>ADR – Ø Zimmerpreis / Nacht €</label>
-        <input type="number" id="adr" placeholder="95">
+        <input type="number" inputmode="decimal" id="adr" placeholder="95">
       </div>
       <div class="field">
         <label>Auslastung Nebensaison %</label>
-        <input type="number" id="auslastung" placeholder="42">
+        <input type="number" inputmode="decimal" id="auslastung" placeholder="42">
       </div>
       <div class="field">
         <label>Nebensaison-Dauer in Monaten</label>
-        <input type="number" id="monate" placeholder="4">
+        <input type="number" inputmode="decimal" id="monate" placeholder="4">
       </div>
     </div>
     <div class="card">
       <div class="section-title">OTA &amp; Fixkosten</div>
       <div class="field">
         <label>OTA-Anteil %</label>
-        <input type="number" id="otaAnteil" placeholder="55">
+        <input type="number" inputmode="decimal" id="otaAnteil" placeholder="55">
       </div>
       <div class="field">
         <label>OTA-Provision %</label>
-        <input type="number" id="otaProvision" value="17">
+        <input type="number" inputmode="decimal" id="otaProvision" value="17">
       </div>
       <div class="field">
         <label>Fixkosten leer € / Zimmer / Tag</label>
-        <input type="number" id="fixkosten" value="40">
+        <input type="number" inputmode="decimal" id="fixkosten" value="40">
       </div>
     </div>
   </div>
